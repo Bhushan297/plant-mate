@@ -1,11 +1,9 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import LoginForm from '../components/LoginForm';
 
 const LoginScreen = () => {
     return(
-        <View>
-            <Text>Login screen text</Text>
-        </View>
+        <LoginForm/>
     )
 }
 
