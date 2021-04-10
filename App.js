@@ -9,17 +9,21 @@ import { default as mapping } from './mapping.json';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from 'expo-font';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
+import TabsScreen from './src/components/TabNavigator';
+import PlantShowScreen from './src/screens/PlantShowScreen';
 
 const navigator = createStackNavigator(
 	{
 		Login: LoginScreen,
+		Tabs: TabsScreen,
+		PlantShow: PlantShowScreen,
 	},
 	{
-		initialRouteName: 'Login',
+		initialRouteName: 'Tabs',
 		defaultNavigationOptions: {
 			title: 'Plant Mitra',
 			headerStyle: {
-				backgroundColor: '#22BF6E',
+				backgroundColor: '#2FDA82',
 			},
 			headerTintColor: 'white',
 			headerTitleAlign: 'center',
@@ -46,7 +50,7 @@ export default () => {
 					theme={{ ...eva.light, ...theme }}
 					customMapping={mapping}
 				>
-					<App />
+					<App/>
 				</ApplicationProvider>
 			</>
 		);
