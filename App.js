@@ -2,6 +2,7 @@ import React from 'react';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import LoginScreen from './src/screens/LoginScreen';
+import RegisterScreen from './src/screens/RegisterScreen';
 import * as eva from '@eva-design/eva';
 import { ApplicationProvider, IconRegistry } from '@ui-kitten/components';
 import { default as theme } from './theme.json';
@@ -13,13 +14,14 @@ import { EvaIconsPack } from '@ui-kitten/eva-icons';
 const navigator = createStackNavigator(
 	{
 		Login: LoginScreen,
+		Register: RegisterScreen,
 	},
 	{
 		initialRouteName: 'Login',
 		defaultNavigationOptions: {
 			title: 'Plant Mitra',
 			headerStyle: {
-				backgroundColor: '#22BF6E',
+				backgroundColor: '#2FDA82',
 			},
 			headerTintColor: 'white',
 			headerTitleAlign: 'center',
@@ -37,7 +39,8 @@ export default () => {
 	});
 	if (!fontsLoaded) {
     	return <AppLoading />;
-  	} else {
+  	}
+	else {
 		return (
 			<>
 				<IconRegistry icons={EvaIconsPack} />
