@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { TouchableOpacity, Text, StyleSheet, FlatList } from 'react-native';
 import { Layout } from '@ui-kitten/components';
-import SearchBar from '../components/SearchBar';
 import useResults from '../hooks/useResults';
 import PlantDetails from '../components/PlantDetails';
 
@@ -10,12 +9,7 @@ const HomeScreen = ({parent}) => {
 	const [results, errorMessage, searchApi] = useResults();
 	
 	return (
-		<Layout style={{ flex: 1 }}>
-			<SearchBar
-				term={term}
-				onTermChange={setTerm}
-				onTermSubmit={() => searchApi(term)}
-			/>
+		<Layout level='2' style={{ flex: 1 }}>
 			{errorMessage ? <Text>{errorMessage}</Text> : null}
 			<FlatList
 				data={results}
@@ -28,7 +22,7 @@ const HomeScreen = ({parent}) => {
 						<TouchableOpacity
 							onPress={() =>
 								parent.navigate('PlantShow', {
-									name: item.common_name,
+									data: item,
 								})
 							}
 							style={styles.image}

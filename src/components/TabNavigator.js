@@ -1,8 +1,11 @@
 import React from 'react';
+import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { Layout, Text, Icon } from '@ui-kitten/components';
+import { Layout, Text, Icon, Button} from '@ui-kitten/components';
 import HomeScreen from '../screens/HomeScreen';
+import FaqScreen from '../screens/FaqScreen';
+import SettingsScreen from '../screens/SettingScreen';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -12,16 +15,6 @@ const UploadScreen = () => {
 			style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
 		>
 			<Text>Uploader!</Text>
-		</Layout>
-	);
-};
-
-const SettingsScreen = () => {
-	return (
-		<Layout
-			style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-		>
-			<Text>Settings!</Text>
 		</Layout>
 	);
 };
@@ -38,9 +31,15 @@ export default TabNavigation = ({ navigation }) => {
 						if (route.name === 'Home') {
 							iconName = focused ? 'home' : 'home-outline';
 						} else if (route.name === 'Settings') {
-							iconName = focused ? 'settings' : 'settings-outline';
+							iconName = focused
+								? 'settings'
+								: 'settings-outline';
 						} else if (route.name === 'Upload') {
 							iconName = focused ? 'camera' : 'camera-outline';
+						} else if (route.name === 'FAQ') {
+							iconName = focused
+								? 'question-mark-circle'
+								: 'question-mark-circle-outline';
 						}
 
 						return <Icon name={iconName} fill="#2FDA82" />;
@@ -65,6 +64,7 @@ export default TabNavigation = ({ navigation }) => {
 					children={() => <HomeScreen parent={navigation} />}
 				/>
 				<Tab.Screen name="Upload" component={UploadScreen} />
+				<Tab.Screen name="FAQ" component={FaqScreen} />
 				<Tab.Screen name="Settings" component={SettingsScreen} />
 			</Tab.Navigator>
 		</NavigationContainer>

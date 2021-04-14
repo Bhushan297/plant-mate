@@ -1,25 +1,22 @@
 import { useState, useEffect } from 'react';
-import trefle from '../api/trefle';
+import dummy from '../api/dummy';
 
 export default () => {
 	const [results, setResults] = useState([]);
 	const [errorMessage, setErrorMessage] = useState('');
 
-	const searchApi = async (searchTerm) => {
+	const searchApi = async () => {
 		try {
-            const response = await trefle.get('/search', {
-                params: {
-                    q: searchTerm
-                },
-            });
-            setResults(response.data.data);
+            const response = await dummy.get('/plants');
+            setResults(response.data);
         } catch(err) {
+            console.log(err);
             setErrorMessage('Something went wrong');
         }
 	};
 
 	useEffect(() => {
-		searchApi('cherry');
+		searchApi();
 	}, []);
 
 	return [results, errorMessage, searchApi];

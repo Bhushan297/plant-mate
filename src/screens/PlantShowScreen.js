@@ -1,31 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Image, FlatList, View, ScrollView, StyleSheet } from 'react-native';
-import { Layout, Text, Card, Divider, List, ListItem } from '@ui-kitten/components';
-import trefle from '../api/trefle';
+import React from 'react';
+import { Image, View, ScrollView, StyleSheet } from 'react-native';
+import { Text, Card, Divider } from '@ui-kitten/components';
 
 const PlantShowScreen = ({ navigation }) => {
-	const [result, setResult] = useState(null);
-	const name = navigation.getParam('name');
-	const getResult = async (name) => {
-		const response = await trefle.get('/', {
-			params: {
-				'filter[common_name]': name,
-			},
-		});
-		setResult(response.data.data[0]);
-	};
-
-	useEffect(() => {
-		getResult(name);
-	}, []);
-
-	if (!result) {
-		return null;
-	}
+	const result = navigation.getParam('data');
+	console.log(Object.keys(result));
 
 	const header = () => (
 		<View style={styles.title}>
-			<Text category="h1">{result.common_name}</Text>
+			<Text category="h1">{result.name}</Text>
 		</View>
 	);
 
@@ -37,6 +20,41 @@ const PlantShowScreen = ({ navigation }) => {
 					style={styles.image}
 					source={{ uri: result.image_url }}
 				/>
+				<Divider />
+				<View style={styles.listItem}>
+					<Text style={styles.itemTitle} category="s1">
+						Plant name
+					</Text>
+					<Text style={styles.descr}>{result.name}</Text>
+				</View>
+				<Divider />
+				<View style={styles.listItem}>
+					<Text style={styles.itemTitle} category="s1">
+						Disease
+					</Text>
+					<Text style={styles.descr}>{result.disease_name}</Text>
+				</View>
+				<Divider />
+				<View style={styles.listItem}>
+					<Text style={styles.itemTitle} category="s1">
+						Probability of disease
+					</Text>
+					<Text style={styles.descr}>{result.disease_prob}</Text>
+				</View>
+				<Divider />
+				<View style={styles.listItem}>
+					<Text style={styles.itemTitle} category="s1">
+						Cause of disease
+					</Text>
+					<Text style={styles.descr}>{result.cause}</Text>
+				</View>
+				<Divider />
+				<View style={styles.listItem}>
+					<Text style={styles.itemTitle} category="s1">
+						Remedy
+					</Text>
+					<Text style={styles.descr}>{result.cure}</Text>
+				</View>
 			</Card>
 		</ScrollView>
 	);
@@ -56,6 +74,16 @@ const styles = StyleSheet.create({
 	image: {
 		width: 300,
 		height: 200,
+	},
+	listItem: {
+		paddingVertical: 10,
+		alignItems: 'center',
+	},
+	itemTitle: {
+		color: '#13293D',
+	},
+	descr: {
+		color: '#0B992C',
 	},
 });
 

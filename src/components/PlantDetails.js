@@ -6,7 +6,7 @@ const PlantDetails = ({ result }) => {
 	return (
 		<View style={styles.container}>
 			<Image style={styles.image} source={{ uri: result.image_url }} />
-			<Text style={styles.name}>{result.common_name}</Text>
+			<Text style={styles.name}>{result.name}</Text>
 		</View>
 	);
 };
