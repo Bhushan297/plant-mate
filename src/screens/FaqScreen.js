@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, StyleSheet, FlatList, TouchableOpacity, Modal, Animated } from 'react-native';
 import { Text, Button, Layout, Card, Input } from '@ui-kitten/components';
 import Accordian from '../components/Accordian';
-import dummy from '../api/dummy';
+import plants from '../api/plants';
 import { FontAwesome } from '@expo/vector-icons';
 import FadeinView from '../components/FadeinView';
 
@@ -15,7 +15,7 @@ const FaqScreen = () => {
 
 	const getFaqs = async () => {
 		try {
-			const response = await dummy.get('/faqs');
+			const response = await plants.get('/faq');
 			setResults(response.data);
 		} catch (err) {
 			console.log(err);

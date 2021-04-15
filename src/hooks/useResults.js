@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import dummy from '../api/dummy';
+import plants from '../api/plants';
 
 export default () => {
 	const [results, setResults] = useState([]);
@@ -7,7 +7,7 @@ export default () => {
 
 	const searchApi = async () => {
 		try {
-            const response = await dummy.get('/plants');
+            const response = await plants.get('/plants');
             setResults(response.data);
         } catch(err) {
             console.log(err);
