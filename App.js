@@ -3,6 +3,7 @@ import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import LoginScreen from './src/screens/LoginScreen';
 import RegisterScreen from './src/screens/RegisterScreen';
+import ForgotPassScreen from './src/screens/ForgotPassScreen';
 import * as eva from '@eva-design/eva';
 import { ApplicationProvider, IconRegistry } from '@ui-kitten/components';
 import { default as theme } from './theme.json';
@@ -15,6 +16,7 @@ const navigator = createStackNavigator(
 	{
 		Login: LoginScreen,
 		Register: RegisterScreen,
+		ForgotPass: ForgotPassScreen,
 	},
 	{
 		initialRouteName: 'Login',

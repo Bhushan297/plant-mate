@@ -39,10 +39,6 @@ const RegisterForm = ({navigation}) => {
 		<Icon {...props} name='alert-circle-outline'/>
 	);
 
-    const labelStyle = (name) => (
-        <Text style={styles.label} category='h6'>{name}</Text>
-    )
-
     const cardHeader = () => (
         <Text style={styles.title}>Register</Text>
     )
