@@ -1,7 +1,7 @@
+
 import React, { useState } from 'react';
 import {
 	StyleSheet,
-	TouchableWithoutFeedback,
 	Image,
 	SafeAreaView, 
 	ScrollView,
@@ -11,32 +11,16 @@ import {
 	Input,
 	Text,
 	Button,
-	Icon,
     Card
 } from '@ui-kitten/components';
 
-const LoginForm = ({authNavigation}) => {
+const ForgotPassForm = ({navigation}) => {
+
 	const [email, setEmail] = useState('');
-	const [password, setPassword] = useState('');
 	const [emailErr, setEmailErr] = useState('basic');
-	const [secureTextEntry, setSecureTextEntry] = React.useState(true);
 
-	const toggleSecureEntry = () => {
-		setSecureTextEntry(!secureTextEntry);
-	};
-
-	const eyeIcon = (props) => (
-		<TouchableWithoutFeedback onPress={toggleSecureEntry}>
-			<Icon {...props} name={secureTextEntry ? 'eye-off' : 'eye'} />
-		</TouchableWithoutFeedback>
-	);
-
-	const AlertIcon = (props) => (
-		<Icon {...props} name='alert-circle-outline'/>
-	);
-	
     const cardHeader = () => (
-        <Text style={styles.title}>Login</Text>
+        <Text style={styles.title}>Forgot Password</Text>
     )
 
 	const validateEmail = (newEmail) => {
@@ -64,7 +48,7 @@ const LoginForm = ({authNavigation}) => {
 						style={styles.container}
 						header={cardHeader}
 					>
-						<Input
+                        <Input
 							style={styles.inputElements}
 							value={email}
 							size={'large'}
@@ -73,35 +57,9 @@ const LoginForm = ({authNavigation}) => {
 							onChangeText={(newEmail) => validateEmail(newEmail)}
 							status={emailErr}
 						/>
-						<Input
-							style={styles.inputElements}
-							value={password}
-							size={'large'}
-							label="Password"
-							placeholder={'Enter password'}
-							onChangeText={(pass) => setPassword(pass)}
-							accessoryRight={eyeIcon}
-							secureTextEntry={secureTextEntry}
-							caption= {'Should contain at least 8 characters'}
-							captionIcon={AlertIcon}
-						/>
-						<TouchableWithoutFeedback
-							onPress={() => authNavigation.navigate('ForgotPass')}
-						>
-							<Text 
-								style={styles.ghostButton}
-							>Forgot password?</Text>
-						</TouchableWithoutFeedback>
 						<Button style={styles.inputElements}>
-							Log in
+							Get OTP
 						</Button>
-						<TouchableWithoutFeedback
-							onPress={() => authNavigation.navigate('Register')}
-						>
-							<Text
-								style={styles.ghostButton}
-							>Not a member? Sign Up</Text>
-						</TouchableWithoutFeedback>
 					</Card>
 				</ScrollView>
 			</SafeAreaView>
@@ -111,6 +69,7 @@ const LoginForm = ({authNavigation}) => {
 
 const styles = StyleSheet.create({
 	container: {
+        flex: 1,
 		margin: 15,
 		justifyContent: 'center',
 	},
@@ -124,17 +83,12 @@ const styles = StyleSheet.create({
 		marginVertical: 10,
 		color: '#111344',
 	},
-	ghostButton: {
-		alignSelf: 'center',
-		fontWeight: 'bold',
-		color: '#22BF6E',
-		marginTop: 5,
-	},
 	tinyLogo: {
-		width: 250,
-		height: 250,
+        flex: 2,
+		width: 300,
+		height: 300,
 		alignSelf: 'center',
 	},
 });
 
-export default LoginForm;
+export default ForgotPassForm;

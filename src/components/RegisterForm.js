@@ -15,10 +15,14 @@ import {
     Card
 } from '@ui-kitten/components';
 
-const LoginForm = ({authNavigation}) => {
+const RegisterForm = ({navigation}) => {
+	const [name, setName] = useState('');
+	const [place, setPlace] = useState('');
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
+	const [conPassword, setConPassword] = useState('');
 	const [emailErr, setEmailErr] = useState('basic');
+	const [passwordErr, setPasswordErr] = useState('basic');
 	const [secureTextEntry, setSecureTextEntry] = React.useState(true);
 
 	const toggleSecureEntry = () => {
@@ -34,9 +38,9 @@ const LoginForm = ({authNavigation}) => {
 	const AlertIcon = (props) => (
 		<Icon {...props} name='alert-circle-outline'/>
 	);
-	
+
     const cardHeader = () => (
-        <Text style={styles.title}>Login</Text>
+        <Text style={styles.title}>Register</Text>
     )
 
 	const validateEmail = (newEmail) => {
@@ -50,21 +54,33 @@ const LoginForm = ({authNavigation}) => {
 		}
 	}
 
+	const validatePassword = (newConPass) => {
+		setConPassword(newConPass);
+		if(newConPass === password){
+			setPasswordErr('success');
+		}
+		else{
+			setPasswordErr('danger');
+		}
+	}
+
 	return (
 		<Layout style={{ flex: 1, backgroundColor: "#CBF6E0" }}>
 			<SafeAreaView>
-				<ScrollView 
-					showsVerticalScrollIndicator = {false}
-				>
-					<Image
-						style={styles.tinyLogo}
-						source={require('./../../assets/logo.png')}
-					/>
+				<ScrollView>
 					<Card 
 						style={styles.container}
 						header={cardHeader}
 					>
 						<Input
+							style={styles.inputElements}
+							value={name}
+							size={'large'}
+							label="Name"
+							placeholder={'Enter name'}
+							onChangeText={(newName) => setName(newName)}
+						/>
+                        <Input
 							style={styles.inputElements}
 							value={email}
 							size={'large'}
@@ -73,7 +89,15 @@ const LoginForm = ({authNavigation}) => {
 							onChangeText={(newEmail) => validateEmail(newEmail)}
 							status={emailErr}
 						/>
-						<Input
+                        <Input
+							style={styles.inputElements}
+							value={place}
+							size={'large'}
+							label="Place"
+							placeholder={'Enter place'}
+							onChangeText={(newPlace) => setPlace(newPlace)}
+						/>
+                        <Input
 							style={styles.inputElements}
 							value={password}
 							size={'large'}
@@ -85,23 +109,19 @@ const LoginForm = ({authNavigation}) => {
 							caption= {'Should contain at least 8 characters'}
 							captionIcon={AlertIcon}
 						/>
-						<TouchableWithoutFeedback
-							onPress={() => authNavigation.navigate('ForgotPass')}
-						>
-							<Text 
-								style={styles.ghostButton}
-							>Forgot password?</Text>
-						</TouchableWithoutFeedback>
+						<Input
+							style={styles.inputElements}
+							value={conPassword}
+							size={'large'}
+							label="Confirm Password"
+							placeholder={'Re-enter password'}
+							onChangeText={(conPass) => validatePassword(conPass)}
+							secureTextEntry={true}
+							status={passwordErr}
+						/>
 						<Button style={styles.inputElements}>
-							Log in
+							Sign Up
 						</Button>
-						<TouchableWithoutFeedback
-							onPress={() => authNavigation.navigate('Register')}
-						>
-							<Text
-								style={styles.ghostButton}
-							>Not a member? Sign Up</Text>
-						</TouchableWithoutFeedback>
 					</Card>
 				</ScrollView>
 			</SafeAreaView>
@@ -111,6 +131,7 @@ const LoginForm = ({authNavigation}) => {
 
 const styles = StyleSheet.create({
 	container: {
+        flex: 1,
 		margin: 15,
 		justifyContent: 'center',
 	},
@@ -124,17 +145,12 @@ const styles = StyleSheet.create({
 		marginVertical: 10,
 		color: '#111344',
 	},
-	ghostButton: {
-		alignSelf: 'center',
-		fontWeight: 'bold',
-		color: '#22BF6E',
-		marginTop: 5,
-	},
 	tinyLogo: {
-		width: 250,
-		height: 250,
+        flex: 2,
+		width: 200,
+		height: 150,
 		alignSelf: 'center',
 	},
 });
 
-export default LoginForm;
+export default RegisterForm;

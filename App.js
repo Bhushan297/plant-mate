@@ -2,6 +2,8 @@ import React from 'react';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import LoginScreen from './src/screens/LoginScreen';
+import RegisterScreen from './src/screens/RegisterScreen';
+import ForgotPassScreen from './src/screens/ForgotPassScreen';
 import * as eva from '@eva-design/eva';
 import { ApplicationProvider, IconRegistry } from '@ui-kitten/components';
 import { default as theme } from './theme.json';
@@ -17,6 +19,8 @@ const navigator = createStackNavigator(
 		Login: LoginScreen,
 		Tabs: TabsScreen,
 		PlantShow: PlantShowScreen,
+		Register: RegisterScreen,
+		ForgotPass: ForgotPassScreen,
 	},
 	{
 		initialRouteName: 'Tabs',
@@ -41,7 +45,8 @@ export default () => {
 	});
 	if (!fontsLoaded) {
     	return <AppLoading />;
-  	} else {
+  	}
+	else {
 		return (
 			<>
 				<IconRegistry icons={EvaIconsPack} />
