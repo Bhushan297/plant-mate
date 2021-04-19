@@ -14,16 +14,27 @@ import {
 	Icon,
     Card
 } from '@ui-kitten/components';
+import * as SecureStore from 'expo-secure-store';
+import useAuth from '../hooks/useAuth';
 
 const LoginForm = ({authNavigation}) => {
-	const [email, setEmail] = useState('');
+	const [username, setName] = useState('');
 	const [password, setPassword] = useState('');
-	const [emailErr, setEmailErr] = useState('basic');
 	const [secureTextEntry, setSecureTextEntry] = React.useState(true);
+	const [loginApi] = useAuth();
 
 	const toggleSecureEntry = () => {
 		setSecureTextEntry(!secureTextEntry);
 	};
+
+	const callApi = async () =>{
+		const resultApi = await loginApi(username, password);
+		if(resultApi){
+			await SecureStore.setItemAsync("loggedIn", "true");
+			await SecureStore.setItemAsync("username" , username);
+			authNavigation.replace('Tabs');
+		}
+	}
 
 	const eyeIcon = (props) => (
 		<TouchableWithoutFeedback onPress={toggleSecureEntry}>
@@ -38,17 +49,6 @@ const LoginForm = ({authNavigation}) => {
     const cardHeader = () => (
         <Text style={styles.title}>Login</Text>
     )
-
-	const validateEmail = (newEmail) => {
-		setEmail(newEmail);
-		var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-		if(re.test(String(newEmail).toLowerCase())){
-			setEmailErr('success');
-		}
-		else{
-			setEmailErr('danger');
-		}
-	}
 
 	return (
 		<Layout style={{ flex: 1, backgroundColor: "#CBF6E0" }}>
@@ -66,12 +66,11 @@ const LoginForm = ({authNavigation}) => {
 					>
 						<Input
 							style={styles.inputElements}
-							value={email}
+							value={username}
 							size={'large'}
-							label="Email"
-							placeholder={'Enter email'}
-							onChangeText={(newEmail) => validateEmail(newEmail)}
-							status={emailErr}
+							label="Username"
+							placeholder={'Enter username'}
+							onChangeText={(newName) => setName(newName)}
 						/>
 						<Input
 							style={styles.inputElements}
@@ -92,7 +91,7 @@ const LoginForm = ({authNavigation}) => {
 								style={styles.ghostButton}
 							>Forgot password?</Text>
 						</TouchableWithoutFeedback>
-						<Button style={styles.inputElements}>
+						<Button style={styles.inputElements} onPress={() => callApi()}>
 							Log in
 						</Button>
 						<TouchableWithoutFeedback
