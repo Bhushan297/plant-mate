@@ -14,56 +14,69 @@ const PlantShowScreen = ({ navigation }) => {
 
 	return (
 		<ScrollView styles={{ flex: 1 }}>
-			<Card style={styles.cardStyle} header={header}>
-				<Divider />
+			<View style={styles.cardStyle}>
 				<Image
 					style={styles.image}
 					source={{ uri: result.image_url }}
 				/>
-				<Divider />
-				<View style={styles.listItem}>
-					<Text style={styles.itemTitle} category="s1">
-						Plant name
-					</Text>
-					<Text style={styles.descr}>{result.name}</Text>
+				<View style={styles.infoRow}>
+					<View style={{flexShrink: 1, marginRight: 5}}>
+						<Text style={styles.itemTitle} category="h3">
+							Plant
+						</Text>
+						<Text style={styles.rowDescr} category="s1">
+							{result.name}
+						</Text>
+					</View>
+					<View style={{flexShrink: 1, marginRight: 5}}>
+						<Text style={styles.itemTitle} category="h3">
+							Disease
+						</Text>
+						<Text style={styles.rowDescr} category="s1">
+							{result.disease_name}
+						</Text>
+					</View>
+					<View style={{flexShrink: 1, marginRight: 5}}>
+						<Text style={styles.itemTitle} category="h3">
+							Probability
+						</Text>
+						<Text style={styles.rowDescr} category="s1">
+							{result.disease_prob}
+						</Text>
+					</View>
 				</View>
-				<Divider />
 				<View style={styles.listItem}>
-					<Text style={styles.itemTitle} category="s1">
-						Disease
-					</Text>
-					<Text style={styles.descr}>{result.disease_name}</Text>
-				</View>
-				<Divider />
-				<View style={styles.listItem}>
-					<Text style={styles.itemTitle} category="s1">
-						Probability of disease
-					</Text>
-					<Text style={styles.descr}>{result.disease_prob}</Text>
-				</View>
-				<Divider />
-				<View style={styles.listItem}>
-					<Text style={styles.itemTitle} category="s1">
+					<Text style={styles.itemTitle} category="h3">
 						Cause of disease
 					</Text>
-					<Text style={styles.descr}>{result.cause}</Text>
+					<Text style={styles.descr} category="s1">
+						{result.cause}
+					</Text>
 				</View>
-				<Divider />
 				<View style={styles.listItem}>
-					<Text style={styles.itemTitle} category="s1">
+					<Text style={styles.itemTitle} category="h3">
 						Remedy
 					</Text>
-					<Text style={styles.descr}>{result.cure}</Text>
+					<Text style={styles.descr} category="s1">
+						{result.cure}
+					</Text>
 				</View>
-			</Card>
+			</View>
 		</ScrollView>
 	);
 };
 
 const styles = StyleSheet.create({
 	cardStyle: {
-		margin: 10,
+		marginVertical: 15,
 		alignItems: 'center',
+		marginHorizontal: 20,
+	},
+	infoRow: {
+		width: '100%',
+		justifyContent: 'space-between',
+		flexDirection: 'row',
+		paddingVertical: 10,
 	},
 	title: {
 		alignSelf: 'center',
@@ -72,18 +85,27 @@ const styles = StyleSheet.create({
 		color: '#111344',
 	},
 	image: {
-		width: 300,
-		height: 200,
+		aspectRatio: 1,
+		width: '85%',
+		borderRadius: 5,
 	},
 	listItem: {
 		paddingVertical: 10,
-		alignItems: 'center',
+		// alignItems: 'center',
 	},
 	itemTitle: {
-		color: '#13293D',
+		color: '#161A12',
+	},
+	rowDescr: {
+		color: '#697177',
+		marginRight: 5,
+		flexShrink: 1,
+		marginRight: 5,
+		// width: '50%'
 	},
 	descr: {
-		color: '#0B992C',
+		marginTop: 5,
+		color: '#697177',
 	},
 });
 

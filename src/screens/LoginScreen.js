@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import LoginForm from '../components/LoginForm';
 
-const LoginScreen = ({navigation}) => {
+const LoginScreen = () => {
     return(
-        <LoginForm authNavigation={navigation}/>
+        <LoginForm/>
     )
 }
 

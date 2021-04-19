@@ -16,6 +16,7 @@ import {
 } from '@ui-kitten/components';
 import * as SecureStore from 'expo-secure-store';
 import useAuth from '../hooks/useAuth';
+import { TextInput } from 'react-native-gesture-handler';
 
 const LoginForm = ({authNavigation}) => {
 	const [username, setName] = useState('');
@@ -51,19 +52,14 @@ const LoginForm = ({authNavigation}) => {
     )
 
 	return (
-		<Layout style={{ flex: 1, backgroundColor: "#CBF6E0" }}>
+		<Layout style={{ flex: 1, backgroundColor: '#CBF6E0' }}>
 			<SafeAreaView>
-				<ScrollView 
-					showsVerticalScrollIndicator = {false}
-				>
+				<ScrollView showsVerticalScrollIndicator={false}>
 					<Image
 						style={styles.tinyLogo}
 						source={require('./../../assets/logo.png')}
 					/>
-					<Card 
-						style={styles.container}
-						header={cardHeader}
-					>
+					<Card style={styles.container} header={cardHeader}>
 						<Input
 							style={styles.inputElements}
 							value={username}
@@ -71,6 +67,7 @@ const LoginForm = ({authNavigation}) => {
 							label="Username"
 							placeholder={'Enter username'}
 							onChangeText={(newName) => setName(newName)}
+							autoCapitalize="none"
 						/>
 						<Input
 							style={styles.inputElements}
@@ -81,25 +78,30 @@ const LoginForm = ({authNavigation}) => {
 							onChangeText={(pass) => setPassword(pass)}
 							accessoryRight={eyeIcon}
 							secureTextEntry={secureTextEntry}
-							caption= {'Should contain at least 8 characters'}
+							caption={'Should contain at least 8 characters'}
 							captionIcon={AlertIcon}
 						/>
 						<TouchableWithoutFeedback
-							onPress={() => authNavigation.navigate('ForgotPass')}
+							onPress={() =>
+								authNavigation.navigate('ForgotPass')
+							}
 						>
-							<Text 
-								style={styles.ghostButton}
-							>Forgot password?</Text>
+							<Text style={styles.ghostButton}>
+								Forgot password?
+							</Text>
 						</TouchableWithoutFeedback>
-						<Button style={styles.inputElements} onPress={() => callApi()}>
+						<Button
+							style={styles.inputElements}
+							onPress={() => callApi()}
+						>
 							Log in
 						</Button>
 						<TouchableWithoutFeedback
 							onPress={() => authNavigation.navigate('Register')}
 						>
-							<Text
-								style={styles.ghostButton}
-							>Not a member? Sign Up</Text>
+							<Text style={styles.ghostButton}>
+								Not a member? Sign Up
+							</Text>
 						</TouchableWithoutFeedback>
 					</Card>
 				</ScrollView>
