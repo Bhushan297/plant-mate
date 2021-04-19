@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import LoginForm from '../components/LoginForm';
 
-const LoginScreen = () => {
-    return(
-        <LoginForm/>
-    )
+const LoginScreen = ({ navigation }) => {
+    return <LoginForm authNavigation={navigation} />;
 }
 
 export default LoginScreen;

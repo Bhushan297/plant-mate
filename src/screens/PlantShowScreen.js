@@ -4,7 +4,6 @@ import { Text, Card, Divider } from '@ui-kitten/components';
 
 const PlantShowScreen = ({ navigation }) => {
 	const result = navigation.getParam('data');
-	console.log(Object.keys(result));
 
 	const header = () => (
 		<View style={styles.title}>

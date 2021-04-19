@@ -17,9 +17,11 @@ const styles = StyleSheet.create({
 		height: 180,
 		borderRadius: 8,
 		marginBottom: 5,
+		marginHorizontal: 8
 	},
 	name: {
 		fontWeight: 'bold',
+		textAlign: 'center'
 	},
 });
 

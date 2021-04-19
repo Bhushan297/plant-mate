@@ -3,22 +3,14 @@ import {
 	StyleSheet,
 	TouchableWithoutFeedback,
 	Image,
-	SafeAreaView, 
+	SafeAreaView,
 	ScrollView,
 } from 'react-native';
-import {
-	Layout,
-	Input,
-	Text,
-	Button,
-	Icon,
-    Card
-} from '@ui-kitten/components';
+import { Layout, Input, Text, Button, Icon, Card } from '@ui-kitten/components';
 import * as SecureStore from 'expo-secure-store';
 import useAuth from '../hooks/useAuth';
-import { TextInput } from 'react-native-gesture-handler';
 
-const LoginForm = ({authNavigation}) => {
+const LoginForm = ({ authNavigation }) => {
 	const [username, setName] = useState('');
 	const [password, setPassword] = useState('');
 	const [secureTextEntry, setSecureTextEntry] = React.useState(true);
@@ -28,14 +20,14 @@ const LoginForm = ({authNavigation}) => {
 		setSecureTextEntry(!secureTextEntry);
 	};
 
-	const callApi = async () =>{
+	const callApi = async () => {
 		const resultApi = await loginApi(username, password);
-		if(resultApi){
-			await SecureStore.setItemAsync("loggedIn", "true");
-			await SecureStore.setItemAsync("username" , username);
+		if (resultApi) {
+			await SecureStore.setItemAsync('loggedIn', 'true');
+			await SecureStore.setItemAsync('username', username);
 			authNavigation.replace('Tabs');
 		}
-	}
+	};
 
 	const eyeIcon = (props) => (
 		<TouchableWithoutFeedback onPress={toggleSecureEntry}>
@@ -44,12 +36,10 @@ const LoginForm = ({authNavigation}) => {
 	);
 
 	const AlertIcon = (props) => (
-		<Icon {...props} name='alert-circle-outline'/>
+		<Icon {...props} name="alert-circle-outline" />
 	);
-	
-    const cardHeader = () => (
-        <Text style={styles.title}>Login</Text>
-    )
+
+	const cardHeader = () => <Text style={styles.title}>Login</Text>;
 
 	return (
 		<Layout style={{ flex: 1, backgroundColor: '#CBF6E0' }}>
@@ -66,8 +56,8 @@ const LoginForm = ({authNavigation}) => {
 							size={'large'}
 							label="Username"
 							placeholder={'Enter username'}
-							onChangeText={(newName) => setName(newName)}
 							autoCapitalize="none"
+							onChangeText={(newName) => setName(newName)}
 						/>
 						<Input
 							style={styles.inputElements}

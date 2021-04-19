@@ -15,17 +15,11 @@ import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import TabsScreen from './src/components/TabNavigator';
 import PlantShowScreen from './src/screens/PlantShowScreen';
 
-const screenName = SecureStore.getItemAsync("loggedIn")=="true"? 'Tabs' : 'Login'
+const screenName = SecureStore.getItemAsync("loggedIn") == "true"? 'Tabs' : 'Login'
 
 const navigator = createStackNavigator(
 	{
 		Login: LoginScreen,
-		// Tabs: {
-		// 	screen: TabsScreen,
-		// 	navigationOptions: {
-		// 		headerLeft: ()=> null,
-		// 	},
-		// },
 		Tabs: TabsScreen,
 		PlantShow: PlantShowScreen,
 		Register: RegisterScreen,

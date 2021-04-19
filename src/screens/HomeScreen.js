@@ -9,11 +9,11 @@ const HomeScreen = ({parent}) => {
 	const [results, errorMessage, searchApi] = useResults();
 	
 	return (
-		<Layout level='2' style={{ flex: 1 }}>
+		<Layout level='2' style={styles.container}>
 			{errorMessage ? <Text>{errorMessage}</Text> : null}
 			<FlatList
 				data={results}
-				style={styles.container}
+				// style={styles.container}
 				numColumns={2}
 				showsVerticalScrollIndicator={false}
 				keyExtractor={(result) => result.id.toString()}
@@ -38,13 +38,11 @@ const HomeScreen = ({parent}) => {
 
 const styles = StyleSheet.create({
 	container: {
-		margin: 10
+		margin: 10,
+		alignItems: 'center'
 	},
 	image: {
-		width: '45%',
-		marginBottom: 15,
-		marginHorizontal: 10,
-		borderRadius: 8
+		marginBottom: 5,
 	},
 });
 
