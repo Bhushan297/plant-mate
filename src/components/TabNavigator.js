@@ -6,18 +6,9 @@ import { Layout, Text, Icon, Button} from '@ui-kitten/components';
 import HomeScreen from '../screens/HomeScreen';
 import FaqScreen from '../screens/FaqScreen';
 import SettingsScreen from '../screens/SettingScreen';
+import PicUploadScreen from '../screens/PicUploadScreen';
 
 const Tab = createMaterialTopTabNavigator();
-
-const UploadScreen = () => {
-	return (
-		<Layout
-			style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-		>
-			<Text>Uploader!</Text>
-		</Layout>
-	);
-};
 
 export default TabNavigation = ({ navigation }) => {
 	return (
@@ -63,9 +54,9 @@ export default TabNavigation = ({ navigation }) => {
 					name="Home"
 					children={() => <HomeScreen parent={navigation} />}
 				/>
-				<Tab.Screen name="Upload" component={UploadScreen} />
+				<Tab.Screen name="Upload" component={PicUploadScreen} />
 				<Tab.Screen name="FAQ" component={FaqScreen} />
-				<Tab.Screen name="Settings" component={SettingsScreen} />
+				<Tab.Screen name="Settings" children={() => <SettingsScreen parent={navigation} />} />
 			</Tab.Navigator>
 		</NavigationContainer>
 	);
