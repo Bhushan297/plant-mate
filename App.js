@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { createAppContainer } from 'react-navigation';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import LoginScreen from './src/screens/LoginScreen';
 import RegisterScreen from './src/screens/RegisterScreen';
@@ -14,19 +14,38 @@ import { useFonts } from 'expo-font';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import TabsScreen from './src/components/TabNavigator';
 import PlantShowScreen from './src/screens/PlantShowScreen';
-
-const screenName = SecureStore.getItemAsync("loggedIn") == "true"? 'Tabs' : 'Login'
+import { LocalizationProvider } from './src/components/Translation';
+import AuthLoadingScreen from './src/screens/AuthScreen';
 
 const navigator = createStackNavigator(
 	{
-		Login: LoginScreen,
 		Tabs: TabsScreen,
 		PlantShow: PlantShowScreen,
 		Register: RegisterScreen,
 		ForgotPass: ForgotPassScreen,
+		Login: LoginScreen,
 	},
 	{
-		initialRouteName: screenName,
+		initialRouteName: 'Tabs',
+		defaultNavigationOptions: {
+			title: 'Plant Mitra',
+			headerStyle: {
+				backgroundColor: '#2FDA82',
+			},
+			headerTintColor: 'white',
+			headerTitleAlign: 'center',
+		},
+	}
+);
+
+const switchnavigator = createSwitchNavigator(
+	{
+		AuthLoading: AuthLoadingScreen,
+		Nav: navigator,
+		Auth: LoginScreen,
+	},
+	{
+		initialRouteName: 'AuthLoading',
 		defaultNavigationOptions: {
 			title: 'Plant Mitra',
 			headerStyle: {
@@ -46,6 +65,7 @@ export default () => {
 		'Montserrat-Bold': require('./assets/fonts/Montserrat-Bold.ttf'),
 		'Montserrat-Regular': require('./assets/fonts/Montserrat-Regular.ttf'),
 	});
+
 	if (!fontsLoaded) {
     	return <AppLoading />;
   	}
@@ -58,7 +78,9 @@ export default () => {
 					theme={{ ...eva.light, ...theme }}
 					customMapping={mapping}
 				>
-					<App/>
+					<LocalizationProvider>
+						<App />
+					</LocalizationProvider>
 				</ApplicationProvider>
 			</>
 		);

@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { View, StyleSheet, FlatList, TouchableOpacity, Modal, Animated } from 'react-native';
 import { Text, Button, Layout, Card, Input } from '@ui-kitten/components';
 import Accordian from '../components/Accordian';
 import plants from '../api/plants';
 import { FontAwesome } from '@expo/vector-icons';
 import FadeinView from '../components/FadeinView';
+import LocalizationContext from '../components/Translation';
+import i18n from 'i18n-js';
 
 const FaqScreen = () => {
 	const [results, setResults] = useState([]);
@@ -12,10 +14,13 @@ const FaqScreen = () => {
 	const [errorMessage, setErrorMessage] = useState('');
 	const [visible, setVisible] = useState(false);
 	const fadeAnim = useRef(new Animated.Value(0)).current;
+	const { setLocale, getLocale, initializeAppLanguage } = useContext(
+		LocalizationContext
+	);
 
 	const getFaqs = async () => {
 		try {
-			const response = await plants.get('/faq');
+			const response = await plants.get(i18n.t('faqApi'));
 			setResults(response.data);
 		} catch (err) {
 			console.log(err);
@@ -24,8 +29,9 @@ const FaqScreen = () => {
 	};
 
 	useEffect(() => {
+		initializeAppLanguage();
 		getFaqs();
-	}, []);
+	}, [i18n.locale]);
 
 	const sendQuestion = (question) => {
 		console.log(question);
@@ -37,9 +43,9 @@ const FaqScreen = () => {
 	}
 
 	return (
-		<Layout level='3' style={{ flex: 1 }}>
+		<Layout level="3" style={{ flex: 1 }}>
 			<Text category="h3" style={styles.title}>
-				Frequently Asked Questions
+				{i18n.t('faqTitle')}
 			</Text>
 			{errorMessage ? <Text>{errorMessage}</Text> : null}
 			<FlatList
@@ -54,35 +60,28 @@ const FaqScreen = () => {
 					);
 				}}
 			/>
-			<Modal
-				visible={visible}
-				animationType={'slide'}
-				transparent={true}
-			>
+			<Modal visible={visible} animationType={'slide'} transparent={true}>
 				<FadeinView style={styles.backdrop}>
 					<Card style={{ elevation: 5 }} disabled={true}>
-						<Text category="s1">
-							Your can ask question to us and we will update this
-							section as soon as possible.
-						</Text>
+						<Text category="s1">{i18n.t('faqModalTitle')}</Text>
 						<Input
-							placeholder="Enter your question"
+							placeholder={i18n.t('faqModalPlaceholder')}
 							value={value}
 							style={{ marginTop: 10 }}
 							onChangeText={(nextValue) => setValue(nextValue)}
 						/>
-						<Button 
+						<Button
 							style={styles.buttonStyle}
 							onPress={() => sendQuestion(value)}
 						>
-							Send
+							{i18n.t('buttonSend')}
 						</Button>
-						<Button 
+						<Button
 							style={styles.buttonStyle}
-							status='danger' 
+							status="danger"
 							onPress={() => setVisible(false)}
 						>
-							Dismiss
+							{i18n.t('buttonDismiss')}
 						</Button>
 					</Card>
 				</FadeinView>

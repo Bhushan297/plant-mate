@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import plants from '../api/plants';
+import i18n from 'i18n-js';
 
 export default () => {
 	const [results, setResults] = useState([]);
@@ -7,17 +8,13 @@ export default () => {
 
 	const searchApi = async () => {
 		try {
-            const response = await plants.get('/plants');
+            const response = await plants.get(i18n.t('plantApi'));
             setResults(response.data);
         } catch(err) {
             console.log(err);
             setErrorMessage('Something went wrong');
         }
 	};
-
-    useEffect (()=>{
-        searchApi();
-    }, [])
 
 	return [results, errorMessage, searchApi];
 };

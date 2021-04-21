@@ -1,6 +1,7 @@
 import React from 'react';
 import { Image, View, ScrollView, StyleSheet } from 'react-native';
-import { Text, Card, Divider } from '@ui-kitten/components';
+import { Text } from '@ui-kitten/components';
+import i18n from 'i18n-js';
 
 const PlantShowScreen = ({ navigation }) => {
 	const result = navigation.getParam('data');
@@ -19,25 +20,25 @@ const PlantShowScreen = ({ navigation }) => {
 					source={{ uri: result.image_url }}
 				/>
 				<View style={styles.infoRow}>
-					<View style={{flexShrink: 1, marginRight: 5}}>
+					<View style={{ flexShrink: 1, marginRight: 5 }}>
 						<Text style={styles.itemTitle} category="h3">
-							Plant
+							{i18n.t('plantName')}
 						</Text>
 						<Text style={styles.rowDescr} category="s1">
 							{result.name}
 						</Text>
 					</View>
-					<View style={{flexShrink: 1, marginRight: 5}}>
+					<View style={{ flexShrink: 1, marginRight: 5 }}>
 						<Text style={styles.itemTitle} category="h3">
-							Disease
+							{i18n.t('plantDisease')}
 						</Text>
 						<Text style={styles.rowDescr} category="s1">
 							{result.disease_name}
 						</Text>
 					</View>
-					<View style={{flexShrink: 1, marginRight: 5}}>
+					<View style={{ flexShrink: 1, marginRight: 5 }}>
 						<Text style={styles.itemTitle} category="h3">
-							Probability
+							{i18n.t('plantProb')}
 						</Text>
 						<Text style={styles.rowDescr} category="s1">
 							{result.disease_prob}
@@ -46,7 +47,7 @@ const PlantShowScreen = ({ navigation }) => {
 				</View>
 				<View style={styles.listItem}>
 					<Text style={styles.itemTitle} category="h3">
-						Cause of disease
+						{i18n.t('plantCause')}
 					</Text>
 					<Text style={styles.descr} category="s1">
 						{result.cause}
@@ -54,7 +55,7 @@ const PlantShowScreen = ({ navigation }) => {
 				</View>
 				<View style={styles.listItem}>
 					<Text style={styles.itemTitle} category="h3">
-						Remedy
+						{i18n.t('plantRemedy')}
 					</Text>
 					<Text style={styles.descr} category="s1">
 						{result.cure}

@@ -1,12 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { TouchableOpacity, Text, StyleSheet, FlatList } from 'react-native';
 import { Layout } from '@ui-kitten/components';
 import useResults from '../hooks/useResults';
 import PlantDetails from '../components/PlantDetails';
+import LocalizationContext from '../components/Translation';
+import i18n from 'i18n-js';
 
 const HomeScreen = ({parent}) => {
 	const [term, setTerm] = useState('');
 	const [results, errorMessage, searchApi] = useResults();
+	const { setLocale, getLocale, initializeAppLanguage } = useContext(
+		LocalizationContext
+	);
+
+	useEffect(() => {
+		initializeAppLanguage();
+		searchApi();
+	}, [i18n.locale])
 	
 	return (
 		<Layout level='2' style={styles.container}>
@@ -38,7 +48,7 @@ const HomeScreen = ({parent}) => {
 
 const styles = StyleSheet.create({
 	container: {
-		margin: 10,
+		marginTop: 10,
 		alignItems: 'center'
 	},
 	image: {
