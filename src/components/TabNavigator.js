@@ -54,7 +54,7 @@ export default TabNavigation = ({ navigation }) => {
 					name="Home"
 					children={() => <HomeScreen parent={navigation} />}
 				/>
-				<Tab.Screen name="Upload" component={PicUploadScreen} />
+				<Tab.Screen name="Upload" children={() => <PicUploadScreen parent={navigation} />} />
 				<Tab.Screen name="FAQ" component={FaqScreen} />
 				<Tab.Screen name="Settings" children={() => <SettingsScreen parent={navigation} />} />
 			</Tab.Navigator>
