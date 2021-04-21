@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Image, View } from "react-native";
+import { View, ToastAndroid } from "react-native";
 import {Layout, Text, Button, Spinner} from "@ui-kitten/components";
 import { MaterialIcons } from '@expo/vector-icons';
 import * as ImagePicker from "expo-image-picker";
@@ -35,7 +35,7 @@ export default function PicUploadScreen({parent}) {
 			parent.navigate('PlantShow', {data:dataToPass})
 		} catch(err) {
 			setWaiting(false)
-			console.log(err)
+			ToastAndroid.show("Some error occured, Please try again!", ToastAndroid.SHORT)
 		}
 	}
 
