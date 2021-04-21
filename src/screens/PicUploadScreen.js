@@ -1,12 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Image, View } from "react-native";
-import {Layout, Text, Button, Icon} from "@ui-kitten/components";
+import {Layout, Text, Button, Spinner} from "@ui-kitten/components";
+import { MaterialIcons } from '@expo/vector-icons';
 import * as ImagePicker from "expo-image-picker";
 import plants from '../api/plants';
+import LocalizationContext from '../components/Translation';
 import i18n from 'i18n-js';
 
-export default function PicUploadScreen() {
+export default function PicUploadScreen({parent}) {
 	const [image, setImage] = useState(null);
+	const [waiting, setWaiting] = useState(false);
+	const {initializeAppLanguage } = useContext(
+		LocalizationContext
+	);
+
+	useEffect(() =>{
+		initializeAppLanguage();
+	},[i18n.locale])
 
 	const callApi = async (dataUri) => {
 		var formData = new FormData();
@@ -18,9 +28,13 @@ export default function PicUploadScreen() {
 
 		formData.append('image', file)
 		try {
-			const resultApi = await plants.post('/predict' , formData)
-			console.log(resultApi.data)
+			const resultApi = await plants.post(i18n.t('predictApi') , formData);
+			let dataToPass = resultApi.data.pred;
+			dataToPass["image_url"]=  dataUri;
+			setWaiting(false)
+			parent.navigate('PlantShow', {data:dataToPass})
 		} catch(err) {
+			setWaiting(false)
 			console.log(err)
 		}
 	}
@@ -42,6 +56,7 @@ export default function PicUploadScreen() {
 		});
 	  
 		if (!result.cancelled) {
+			setWaiting(true);
 			setImage(result.uri);
 			callApi(result.uri);
 		}
@@ -65,6 +80,7 @@ export default function PicUploadScreen() {
 		});
 
 		if (!result.cancelled) {
+			setWaiting(true)
 			setImage(result.uri);
 			callApi(result.uri);
 		}
@@ -77,28 +93,21 @@ export default function PicUploadScreen() {
 		<Layout
 			style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
 		>
-			{image && (
-				<Image
-					// source={{ uri : 'data:image/jpeg;base64,' + image }}
-					source={{ uri: image }}
-					style={{ width: 200, height: 200 }}
-				/>
-			)}
-			<Button onPress={openCamera}> Camera </Button>
-			<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+			<Button onPress={openCamera}> <MaterialIcons name="add-a-photo" size={40} color="white" /> </Button>
+			<View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 20 }}>
 				<View
-					style={{ flex: 1, height: 1, backgroundColor: 'black' }}
+					style={{height: 1, width: 100, backgroundColor: 'black' }}
 				/>
 				<View>
-					<Text style={{ width: 50, textAlign: 'center' }}>
-						{i18n.t('predictOr')}
+					<Text style={{ width: 50, textAlign: 'center'  }}>
+						{ waiting ? <Spinner status='success' size='large'/> : i18n.t('predictOr')}
 					</Text>
 				</View>
 				<View
-					style={{ flex: 1, height: 1, backgroundColor: 'black' }}
+					style={{height: 1, width: 100, backgroundColor: 'black' }}
 				/>
 			</View>
-			<Button onPress={openImagePicker}> Image Picker </Button>
+			<Button onPress={openImagePicker}> <MaterialIcons name="add-photo-alternate" size={40} color="white" /> </Button>
 		</Layout>
 	);
 }
