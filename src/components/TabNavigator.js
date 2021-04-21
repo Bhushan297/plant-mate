@@ -2,7 +2,7 @@ import React from 'react';
 import { StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { Layout, Text, Icon, Button} from '@ui-kitten/components';
+import { Icon } from '@ui-kitten/components';
 import HomeScreen from '../screens/HomeScreen';
 import FaqScreen from '../screens/FaqScreen';
 import SettingsScreen from '../screens/SettingScreen';
