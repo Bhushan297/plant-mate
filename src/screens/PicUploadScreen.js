@@ -8,19 +8,21 @@ import i18n from 'i18n-js';
 export default function PicUploadScreen() {
 	const [image, setImage] = useState(null);
 
-	const callApi = async (blob) =>{
+	const callApi = async (dataUri) => {
+		var formData = new FormData();
+		let file = {
+			uri: dataUri, 
+			type: 'multipart/form-data', 
+			name: dataUri
+		};
+
+		formData.append('image', file)
 		try {
-			var formData = new FormData();
-			formData.append('image', blob)
-            const response = await plants.post('/predict' , formData, {
-				headers: {
-				 	'content-type': 'multipart/form-data' // do not forget this 
-				}})
-            console.log(response);
-        } catch(err) {
-            console.log(err);
-            // setErrorMessage('Something went wrong');
-        }
+			const resultApi = await plants.post('/predict' , formData)
+			console.log(resultApi.data)
+		} catch(err) {
+			console.log(err)
+		}
 	}
 
 	let openCamera = async () => {
@@ -41,6 +43,7 @@ export default function PicUploadScreen() {
 	  
 		if (!result.cancelled) {
 			setImage(result.uri);
+			callApi(result.uri);
 		}
 		
 	};
@@ -60,19 +63,14 @@ export default function PicUploadScreen() {
 			quality: 1,
 			// base64: true,
 		});
-	  
+
 		if (!result.cancelled) {
 			setImage(result.uri);
-			const response = await fetch(result.uri);
-			const blob = await response.blob();
-			var formData = new FormData();
-			formData.append('image', blob, 'test.jpg')
-            const response1 = await plants.post('/predict' , formData, {
-				headers: {
-				 	'content-type': 'multipart/form-data' // do not forget this 
-				}})
-            console.log(response1);
+			callApi(result.uri);
 		}
+		
+		
+
 	};
 
 	return (

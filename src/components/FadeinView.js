@@ -4,7 +4,7 @@ import { Animated } from 'react-native';
 const FadeinView = ({ style, children }) => {
 	const fadeAnim = useRef(new Animated.Value(0.2)).current; // Initial value for opacity: 0
 
-	React.useEffect(() => {
+	useEffect(() => {
 		Animated.timing(fadeAnim, {
 			toValue: 1,
 			duration: 500,

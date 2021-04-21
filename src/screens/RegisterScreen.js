@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import RegisterForm from '../components/RegisterForm';
 
-const RegisterScreen = () => {
+const RegisterScreen = ({navigation}) => {
     return(
-        <RegisterForm/>
+        <RegisterForm authNavigation={navigation}/>
     )
 }
 

@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ForgotPassForm from '../components/ForgotPassForm';
 
-const ForgotPassScreen = () => {
+const ForgotPassScreen = ({navigation}) => {
     return(
-        <ForgotPassForm/>
+        <ForgotPassForm authNavigation={navigation}/>
     )
 }
 
