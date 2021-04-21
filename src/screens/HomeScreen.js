@@ -38,7 +38,7 @@ const HomeScreen = ({parent}) => {
 
 const styles = StyleSheet.create({
 	container: {
-		margin: 10,
+		marginTop: 10,
 		alignItems: 'center'
 	},
 	image: {

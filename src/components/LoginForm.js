@@ -5,27 +5,41 @@ import {
 	Image,
 	SafeAreaView,
 	ScrollView,
+	Modal, 
+	ToastAndroid,
 } from 'react-native';
-import { Layout, Input, Text, Button, Icon, Card } from '@ui-kitten/components';
+import { Layout, Input, Text, Button, Icon, Card, Spinner } from '@ui-kitten/components';
 import * as SecureStore from 'expo-secure-store';
-import useAuth from '../hooks/useAuth';
+import {loginApi} from '../hooks/useAuth';
+import FadeinView from '../components/FadeinView';
 
 const LoginForm = ({ authNavigation }) => {
 	const [username, setName] = useState('');
 	const [password, setPassword] = useState('');
+	const [waiting, setWaiting] = useState(false);
 	const [secureTextEntry, setSecureTextEntry] = React.useState(true);
-	const [loginApi] = useAuth();
+	const [visible, setVisible] = useState(false);
 
 	const toggleSecureEntry = () => {
 		setSecureTextEntry(!secureTextEntry);
 	};
 
+	const openModal = () => {
+		setVisible(true);
+	};
+
 	const callApi = async () => {
+		setWaiting(true)
 		const resultApi = await loginApi(username, password);
 		if (resultApi) {
+			ToastAndroid.show("Logged In Successfully!", ToastAndroid.SHORT)
 			await SecureStore.setItemAsync('loggedIn', 'true');
 			await SecureStore.setItemAsync('username', username);
 			authNavigation.replace('Tabs');
+		}
+		else{
+			setWaiting(false)
+			openModal();
 		}
 	};
 
@@ -33,10 +47,6 @@ const LoginForm = ({ authNavigation }) => {
 		<TouchableWithoutFeedback onPress={toggleSecureEntry}>
 			<Icon {...props} name={secureTextEntry ? 'eye-off' : 'eye'} />
 		</TouchableWithoutFeedback>
-	);
-
-	const AlertIcon = (props) => (
-		<Icon {...props} name="alert-circle-outline" />
 	);
 
 	const cardHeader = () => <Text style={styles.title}>Login</Text>;
@@ -68,8 +78,6 @@ const LoginForm = ({ authNavigation }) => {
 							onChangeText={(pass) => setPassword(pass)}
 							accessoryRight={eyeIcon}
 							secureTextEntry={secureTextEntry}
-							caption={'Should contain at least 8 characters'}
-							captionIcon={AlertIcon}
 						/>
 						<TouchableWithoutFeedback
 							onPress={() =>
@@ -84,7 +92,7 @@ const LoginForm = ({ authNavigation }) => {
 							style={styles.inputElements}
 							onPress={() => callApi()}
 						>
-							Log in
+							{ waiting ? <Spinner status='basic'/> : "Login"}
 						</Button>
 						<TouchableWithoutFeedback
 							onPress={() => authNavigation.navigate('Register')}
@@ -96,6 +104,26 @@ const LoginForm = ({ authNavigation }) => {
 					</Card>
 				</ScrollView>
 			</SafeAreaView>
+			<Modal
+				visible={visible}
+				animationType={'slide'}
+				transparent={true}
+			>
+				<FadeinView style={styles.backdrop}>
+					<Card style={{ elevation: 5 }} disabled={true}>
+						<Text category="s1">
+							Username or Password incorrect.
+						</Text>
+						<Button 
+							style={styles.buttonStyle}
+							status='danger' 
+							onPress={() => setVisible(false)}
+						>
+							Dismiss
+						</Button>
+					</Card>
+				</FadeinView>
+			</Modal>
 		</Layout>
 	);
 };
@@ -125,6 +153,16 @@ const styles = StyleSheet.create({
 		width: 250,
 		height: 250,
 		alignSelf: 'center',
+	},
+	backdrop: {
+		backgroundColor: 'rgba(0, 0, 0, 0.5)',
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		paddingHorizontal: 15
+	},
+	buttonStyle: {
+		marginVertical: 5
 	},
 });
 

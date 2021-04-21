@@ -26,7 +26,7 @@ const navigator = createStackNavigator(
 		ForgotPass: ForgotPassScreen,
 	},
 	{
-		initialRouteName: screenName,
+		initialRouteName: 'Tabs',
 		defaultNavigationOptions: {
 			title: 'Plant Mitra',
 			headerStyle: {

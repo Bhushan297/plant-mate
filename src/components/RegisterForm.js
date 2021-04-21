@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import {
 	StyleSheet,
 	TouchableWithoutFeedback,
-	Image,
 	SafeAreaView, 
 	ScrollView,
+	Modal, 
+	ToastAndroid,
 } from 'react-native';
 import {
 	Layout,
@@ -12,21 +13,51 @@ import {
 	Text,
 	Button,
 	Icon,
-    Card
+    Card,
+	Spinner,
 } from '@ui-kitten/components';
+import {registerApi} from '../hooks/useAuth';
+import FadeinView from '../components/FadeinView';
 
-const RegisterForm = ({navigation}) => {
+const RegisterForm = ({authNavigation}) => {
 	const [name, setName] = useState('');
-	const [place, setPlace] = useState('');
-	const [email, setEmail] = useState('');
+	const [username, setUname] = useState('');
+	const [answer1, setAns1] = useState('');
+	const [answer2, setAns2] = useState('');
 	const [password, setPassword] = useState('');
 	const [conPassword, setConPassword] = useState('');
-	const [emailErr, setEmailErr] = useState('basic');
+	const [passwordLenErr, setPasswordLenErr] = useState('basic');
 	const [passwordErr, setPasswordErr] = useState('basic');
+	const [waiting, setWaiting] = useState(false);
 	const [secureTextEntry, setSecureTextEntry] = React.useState(true);
+	const [visible, setVisible] = useState(false);
+
 
 	const toggleSecureEntry = () => {
 		setSecureTextEntry(!secureTextEntry);
+	};
+
+	const openModal = () => {
+		setVisible(true);
+	};
+
+	const callApi = async () => {
+		if(name && username && password && answer1 && answer2 == null || ''){
+			openModal();
+		}
+		else{
+			setWaiting(true)
+			const resultApi = await registerApi(name, username, password, answer1, answer2);
+			if (resultApi) {
+				ToastAndroid.show("User Registered Sucessfully !", ToastAndroid.SHORT)
+				authNavigation.replace('Login');
+			}
+			else{
+				setWaiting(false)
+				openModal();
+			}
+		}
+		
 	};
 
 	const eyeIcon = (props) => (
@@ -43,14 +74,13 @@ const RegisterForm = ({navigation}) => {
         <Text style={styles.title}>Register</Text>
     )
 
-	const validateEmail = (newEmail) => {
-		setEmail(newEmail);
-		var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-		if(re.test(String(newEmail).toLowerCase())){
-			setEmailErr('success');
+	const validatePasswordLength = (pass) =>{
+		setPassword(pass);
+		if(pass.length < 8){
+			setPasswordLenErr('danger')
 		}
 		else{
-			setEmailErr('danger');
+			setPasswordLenErr('success')
 		}
 	}
 
@@ -80,32 +110,44 @@ const RegisterForm = ({navigation}) => {
 							placeholder={'Enter name'}
 							onChangeText={(newName) => setName(newName)}
 						/>
-                        <Input
+
+						<Input
 							style={styles.inputElements}
-							value={email}
+							value={username}
 							size={'large'}
-							label="Email"
-							placeholder={'Enter email'}
-							onChangeText={(newEmail) => validateEmail(newEmail)}
-							status={emailErr}
+							label="Username"
+							placeholder={'Enter username'}
+							onChangeText={(newUname) => setUname(newUname)}
 						/>
-                        <Input
+
+						<Input
 							style={styles.inputElements}
-							value={place}
+							value={answer1}
 							size={'large'}
-							label="Place"
-							placeholder={'Enter place'}
-							onChangeText={(newPlace) => setPlace(newPlace)}
+							label="What is your mothers maiden name?"
+							placeholder={'Enter Answer 1'}
+							onChangeText={(newAns1) => setAns1(newAns1)}
 						/>
+
+						<Input
+							style={styles.inputElements}
+							value={answer2}
+							size={'large'}
+							label="Which year did you graduate?"
+							placeholder={'Enter Answer 2'}
+							onChangeText={(newAns2) => setAns2(newAns2)}
+						/>
+
                         <Input
 							style={styles.inputElements}
 							value={password}
 							size={'large'}
 							label="Password"
 							placeholder={'Enter password'}
-							onChangeText={(pass) => setPassword(pass)}
+							onChangeText={(pass) => validatePasswordLength(pass)}
 							accessoryRight={eyeIcon}
 							secureTextEntry={secureTextEntry}
+							status={passwordLenErr}
 							caption= {'Should contain at least 8 characters'}
 							captionIcon={AlertIcon}
 						/>
@@ -119,12 +161,32 @@ const RegisterForm = ({navigation}) => {
 							secureTextEntry={true}
 							status={passwordErr}
 						/>
-						<Button style={styles.inputElements}>
-							Sign Up
+						<Button style={styles.inputElements} onPress={() => callApi()}>
+							{ waiting ? <Spinner status='basic'/> : "Sign Up"}
 						</Button>
 					</Card>
 				</ScrollView>
 			</SafeAreaView>
+			<Modal
+				visible={visible}
+				animationType={'slide'}
+				transparent={true}
+			>
+				<FadeinView style={styles.backdrop}>
+					<Card style={{ elevation: 5 }} disabled={true}>
+						<Text category="s1">
+							Please check if all the fields are filled or try using different username.
+						</Text>
+						<Button 
+							style={styles.buttonStyle}
+							status='danger' 
+							onPress={() => setVisible(false)}
+						>
+							Dismiss
+						</Button>
+					</Card>
+				</FadeinView>
+			</Modal>
 		</Layout>
 	);
 };
@@ -150,6 +212,16 @@ const styles = StyleSheet.create({
 		width: 200,
 		height: 150,
 		alignSelf: 'center',
+	},
+	backdrop: {
+		backgroundColor: 'rgba(0, 0, 0, 0.5)',
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		paddingHorizontal: 15
+	},
+	buttonStyle: {
+		marginVertical: 5
 	},
 });
 
