@@ -3,10 +3,11 @@ import {
 	StyleSheet,
 	TouchableWithoutFeedback,
 	Image,
-	SafeAreaView,
+	View,
 	ScrollView,
 	Modal, 
 	ToastAndroid,
+	StatusBar
 } from 'react-native';
 import { Layout, Input, Text, Button, Icon, Card, Spinner } from '@ui-kitten/components';
 import * as SecureStore from 'expo-secure-store';
@@ -53,7 +54,8 @@ const LoginForm = ({ authNavigation }) => {
 
 	return (
 		<Layout style={{ flex: 1, backgroundColor: '#CBF6E0' }}>
-			<SafeAreaView>
+			<View>
+				<StatusBar barStyle="dark-content" backgroundColor="#CBF6E0" />
 				<ScrollView showsVerticalScrollIndicator={false}>
 					<Image
 						style={styles.tinyLogo}
@@ -92,7 +94,7 @@ const LoginForm = ({ authNavigation }) => {
 							style={styles.inputElements}
 							onPress={() => callApi()}
 						>
-							{ waiting ? <Spinner status='basic'/> : "Login"}
+							{waiting ? <Spinner status="basic" /> : 'Login'}
 						</Button>
 						<TouchableWithoutFeedback
 							onPress={() => authNavigation.navigate('Register')}
@@ -103,20 +105,16 @@ const LoginForm = ({ authNavigation }) => {
 						</TouchableWithoutFeedback>
 					</Card>
 				</ScrollView>
-			</SafeAreaView>
-			<Modal
-				visible={visible}
-				animationType={'slide'}
-				transparent={true}
-			>
+			</View>
+			<Modal visible={visible} animationType={'slide'} transparent={true}>
 				<FadeinView style={styles.backdrop}>
 					<Card style={{ elevation: 5 }} disabled={true}>
 						<Text category="s1">
 							Username or Password incorrect.
 						</Text>
-						<Button 
+						<Button
 							style={styles.buttonStyle}
-							status='danger' 
+							status="danger"
 							onPress={() => setVisible(false)}
 						>
 							Dismiss

@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import {
 	StyleSheet,
 	TouchableWithoutFeedback,
-	SafeAreaView, 
+	View, 
 	ScrollView,
 	Modal, 
 	ToastAndroid,
+	StatusBar
 } from 'react-native';
 import {
 	Layout,
@@ -94,14 +95,11 @@ const ForgotPassForm = ({authNavigation}) => {
 	}
 
 	return (
-		<Layout style={{ flex: 1, backgroundColor: "#CBF6E0" }}>
-			<SafeAreaView>
+		<Layout style={{ flex: 1, backgroundColor: '#CBF6E0' }}>
+			<View>
+				<StatusBar barStyle="dark-content" backgroundColor="#CBF6E0" />
 				<ScrollView>
-					<Card 
-						style={styles.container}
-						header={cardHeader}
-					>
-
+					<Card style={styles.container} header={cardHeader}>
 						<Input
 							style={styles.inputElements}
 							value={username}
@@ -129,17 +127,19 @@ const ForgotPassForm = ({authNavigation}) => {
 							onChangeText={(newAns2) => setAns2(newAns2)}
 						/>
 
-                        <Input
+						<Input
 							style={styles.inputElements}
 							value={password}
 							size={'large'}
 							label="New Password"
 							placeholder={'Enter new password'}
-							onChangeText={(pass) => validatePasswordLength(pass)}
+							onChangeText={(pass) =>
+								validatePasswordLength(pass)
+							}
 							accessoryRight={eyeIcon}
 							secureTextEntry={secureTextEntry}
 							status={passwordLenErr}
-							caption= {'Should contain at least 8 characters'}
+							caption={'Should contain at least 8 characters'}
 							captionIcon={AlertIcon}
 						/>
 						<Input
@@ -148,29 +148,34 @@ const ForgotPassForm = ({authNavigation}) => {
 							size={'large'}
 							label="Confirm Password"
 							placeholder={'Re-enter password'}
-							onChangeText={(conPass) => validatePassword(conPass)}
+							onChangeText={(conPass) =>
+								validatePassword(conPass)
+							}
 							secureTextEntry={true}
 							status={passwordErr}
 						/>
-						<Button style={styles.inputElements} onPress={() => callApi()}>
-							{ waiting ? <Spinner status='basic'/> : "Reset Password"}
+						<Button
+							style={styles.inputElements}
+							onPress={() => callApi()}
+						>
+							{waiting ? (
+								<Spinner status="basic" />
+							) : (
+								'Reset Password'
+							)}
 						</Button>
 					</Card>
 				</ScrollView>
-			</SafeAreaView>
-			<Modal
-				visible={visible}
-				animationType={'slide'}
-				transparent={true}
-			>
+			</View>
+			<Modal visible={visible} animationType={'slide'} transparent={true}>
 				<FadeinView style={styles.backdrop}>
 					<Card style={{ elevation: 5 }} disabled={true}>
 						<Text category="s1">
 							Invalid entry, Please try filling the form again.
 						</Text>
-						<Button 
+						<Button
 							style={styles.buttonStyle}
-							status='danger' 
+							status="danger"
 							onPress={() => setVisible(false)}
 						>
 							Dismiss

@@ -21,9 +21,12 @@ const navigator = createStackNavigator(
 	{
 		Tabs: TabsScreen,
 		PlantShow: PlantShowScreen,
-		Register: RegisterScreen,
-		ForgotPass: ForgotPassScreen,
-		Login: LoginScreen,
+		Login: {
+			screen: LoginScreen,
+			navigationOptions: {
+				headerShown: false
+			}
+		},
 	},
 	{
 		initialRouteName: 'Tabs',
@@ -38,26 +41,33 @@ const navigator = createStackNavigator(
 	}
 );
 
-const switchnavigator = createSwitchNavigator(
+const authNavigator = createStackNavigator(
 	{
-		AuthLoading: AuthLoadingScreen,
-		Nav: navigator,
-		Auth: LoginScreen,
+		Register: RegisterScreen,
+		ForgotPass: ForgotPassScreen,
+		Login: LoginScreen,
+		Tabs: navigator
 	},
 	{
-		initialRouteName: 'AuthLoading',
+		initialRouteName: 'Login',
 		defaultNavigationOptions: {
-			title: 'Plant Mitra',
-			headerStyle: {
-				backgroundColor: '#2FDA82',
-			},
-			headerTintColor: 'white',
-			headerTitleAlign: 'center',
-		},
+			headerShown: false
+		}
 	}
 );
 
-const App = createAppContainer(navigator);
+const switchNavigator = createSwitchNavigator(
+	{
+		AuthLoading: AuthLoadingScreen,
+		Nav: navigator,
+		Auth: authNavigator,
+	},
+	{
+		initialRouteName: 'AuthLoading'
+	}
+);
+
+const App = createAppContainer(switchNavigator);
 
 export default () => {
 	let [fontsLoaded] = useFonts({

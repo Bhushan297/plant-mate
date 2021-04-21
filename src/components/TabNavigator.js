@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { Layout, Text, Icon, Button} from '@ui-kitten/components';
@@ -13,6 +13,7 @@ const Tab = createMaterialTopTabNavigator();
 export default TabNavigation = ({ navigation }) => {
 	return (
 		<NavigationContainer>
+			<StatusBar barStyle="light-content" backgroundColor="#2FDA82" />
 			<Tab.Navigator
 				tabBarPosition="bottom"
 				screenOptions={({ route }) => ({
@@ -56,7 +57,10 @@ export default TabNavigation = ({ navigation }) => {
 				/>
 				<Tab.Screen name="Upload" component={PicUploadScreen} />
 				<Tab.Screen name="FAQ" component={FaqScreen} />
-				<Tab.Screen name="Settings" children={() => <SettingsScreen parent={navigation} />} />
+				<Tab.Screen
+					name="Settings"
+					children={() => <SettingsScreen parent={navigation} />}
+				/>
 			</Tab.Navigator>
 		</NavigationContainer>
 	);
