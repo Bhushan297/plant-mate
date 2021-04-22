@@ -32,14 +32,25 @@ const FaqScreen = () => {
 		}
 	};
 
+	const sendQuestion = async (question) => {
+		// try {
+		// 	setWaiting(true);
+		// 	const response = await plants.post('/addQuestion', {
+		// 		question: question
+		// 	});
+		// 	setResults(response.data);
+		// 	setWaiting(false);
+		// } catch (err) {
+		// 	setWaiting(false);
+		// 	console.log(err);
+		// 	setErrorMessage('Something went wrong');
+		// }
+	}
+
 	useEffect(() => {
 		initializeAppLanguage();
 		getFaqs();
 	}, [i18n.locale]);
-
-	const sendQuestion = (question) => {
-		console.log(question);
-	};
 
 	const openModal = () => {
 		setVisible(true);
