@@ -57,8 +57,9 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		backgroundColor: 'white',
 		borderRadius: 5,
-		padding: 20,
-		marginHorizontal: 10,
+		paddingHorizontal: 15,
+		paddingVertical: 20,
+		marginHorizontal: 8,
 		marginBottom: 5,
 	},
 	child: {

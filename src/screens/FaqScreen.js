@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import { View, StyleSheet, FlatList, TouchableOpacity, Modal, Animated, ToastAndroid, } from 'react-native';
+import { View, StyleSheet, FlatList, TouchableOpacity, Modal, Animated, ToastAndroid } from 'react-native';
 import { Text, Button, Layout, Card, Input, Spinner } from '@ui-kitten/components';
 import Accordian from '../components/Accordian';
 import plants from '../api/plants';
@@ -13,6 +13,7 @@ const FaqScreen = () => {
 	const [results, setResults] = useState([]);
 	const [value, setValue] = useState('');
 	const [waiting, setWaiting] = useState(false);
+	const [sending, setSending] = useState(false);
 	const [errorMessage, setErrorMessage] = useState('');
 	const [visible, setVisible] = useState(false);
 	const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -20,15 +21,36 @@ const FaqScreen = () => {
 		LocalizationContext
 	);
 
-	const getFaqs = async (question) => {
-		const author = await SecureStore.getItemAsync("username");
+	const getFaqs = async () => {
 		try {
-			const response = await plants.post('/addQuestion', {author,question});
-			console.log(response.data);
-			ToastAndroid.show("Question sent!", ToastAndroid.SHORT)
+			setWaiting(true);
+			const response = await plants.get(i18n.t('faqApi'));
+			setResults(response.data);
+			setWaiting(false);
+		} catch (err) {
+			setWaiting(false);
+			console.log(err);
+			setErrorMessage('Something went wrong');
+		}
+	};
+
+	const sendQuestion = async (question) => {
+		const author = await SecureStore.getItemAsync('username');
+		try {
+			setSending(true);
+			const response = await plants.post('/addQuestion', {
+				author,
+				question,
+			});
+			setSending(false);
+			ToastAndroid.show('Question sent!', ToastAndroid.SHORT);
 		} catch (err) {
 			console.log(err);
-			ToastAndroid.show("Something went wrong, Please try again", ToastAndroid.SHORT)
+			setSending(false);
+			ToastAndroid.show(
+				'Something went wrong, Please try again!',
+				ToastAndroid.SHORT
+			);
 		}
 	};
 
@@ -36,20 +58,6 @@ const FaqScreen = () => {
 		initializeAppLanguage();
 		getFaqs();
 	}, [i18n.locale]);
-
-	const sendQuestion = async (question) => {
-		const 
-		try {
-			const resultApi = await plants.post(i18n.t('predictApi') , formData);
-			let dataToPass = resultApi.data.pred;
-			dataToPass["image_url"]=  dataUri;
-			setWaiting(false)
-			parent.navigate('PlantShow', {data:dataToPass})
-		} catch(err) {
-			setWaiting(false)
-			ToastAndroid.show("Some error occured, Please try again!", ToastAndroid.SHORT)
-		}
-	};
 
 	const openModal = () => {
 		setVisible(true);
@@ -104,7 +112,11 @@ const FaqScreen = () => {
 									style={styles.buttonStyle}
 									onPress={() => sendQuestion(value)}
 								>
-									{i18n.t('buttonSend')}
+									{ sending ? (
+										<Spinner status="basic" />
+									) : (
+										i18n.t('buttonSend')
+									)}
 								</Button>
 								<Button
 									style={styles.buttonStyle}
