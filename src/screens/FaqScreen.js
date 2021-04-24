@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import { View, StyleSheet, FlatList, TouchableOpacity, Modal, Animated } from 'react-native';
+import { View, StyleSheet, FlatList, TouchableOpacity, Modal, Animated, ToastAndroid, } from 'react-native';
 import { Text, Button, Layout, Card, Input, Spinner } from '@ui-kitten/components';
 import Accordian from '../components/Accordian';
 import plants from '../api/plants';
@@ -7,6 +7,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import FadeinView from '../components/FadeinView';
 import LocalizationContext from '../components/Translation';
 import i18n from 'i18n-js';
+import * as SecureStore from 'expo-secure-store';
 
 const FaqScreen = () => {
 	const [results, setResults] = useState([]);
@@ -19,16 +20,15 @@ const FaqScreen = () => {
 		LocalizationContext
 	);
 
-	const getFaqs = async () => {
+	const getFaqs = async (question) => {
+		const author = await SecureStore.getItemAsync("username");
 		try {
-			setWaiting(true);
-			const response = await plants.get(i18n.t('faqApi'));
-			setResults(response.data);
-			setWaiting(false);
+			const response = await plants.post('/addQuestion', {author,question});
+			console.log(response.data);
+			ToastAndroid.show("Question sent!", ToastAndroid.SHORT)
 		} catch (err) {
-			setWaiting(false);
 			console.log(err);
-			setErrorMessage('Something went wrong');
+			ToastAndroid.show("Something went wrong, Please try again", ToastAndroid.SHORT)
 		}
 	};
 
@@ -37,8 +37,18 @@ const FaqScreen = () => {
 		getFaqs();
 	}, [i18n.locale]);
 
-	const sendQuestion = (question) => {
-		console.log(question);
+	const sendQuestion = async (question) => {
+		const 
+		try {
+			const resultApi = await plants.post(i18n.t('predictApi') , formData);
+			let dataToPass = resultApi.data.pred;
+			dataToPass["image_url"]=  dataUri;
+			setWaiting(false)
+			parent.navigate('PlantShow', {data:dataToPass})
+		} catch(err) {
+			setWaiting(false)
+			ToastAndroid.show("Some error occured, Please try again!", ToastAndroid.SHORT)
+		}
 	};
 
 	const openModal = () => {
