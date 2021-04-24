@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import { View, StyleSheet, FlatList, TouchableOpacity, Modal, Animated } from 'react-native';
+import { View, StyleSheet, FlatList, TouchableOpacity, Modal, Animated, ToastAndroid } from 'react-native';
 import { Text, Button, Layout, Card, Input, Spinner } from '@ui-kitten/components';
 import Accordian from '../components/Accordian';
 import plants from '../api/plants';
@@ -7,11 +7,13 @@ import { FontAwesome } from '@expo/vector-icons';
 import FadeinView from '../components/FadeinView';
 import LocalizationContext from '../components/Translation';
 import i18n from 'i18n-js';
+import * as SecureStore from 'expo-secure-store';
 
 const FaqScreen = () => {
 	const [results, setResults] = useState([]);
 	const [value, setValue] = useState('');
 	const [waiting, setWaiting] = useState(false);
+	const [sending, setSending] = useState(false);
 	const [errorMessage, setErrorMessage] = useState('');
 	const [visible, setVisible] = useState(false);
 	const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -33,19 +35,24 @@ const FaqScreen = () => {
 	};
 
 	const sendQuestion = async (question) => {
-		// try {
-		// 	setWaiting(true);
-		// 	const response = await plants.post('/addQuestion', {
-		// 		question: question
-		// 	});
-		// 	setResults(response.data);
-		// 	setWaiting(false);
-		// } catch (err) {
-		// 	setWaiting(false);
-		// 	console.log(err);
-		// 	setErrorMessage('Something went wrong');
-		// }
-	}
+		const author = await SecureStore.getItemAsync('username');
+		try {
+			setSending(true);
+			const response = await plants.post('/addQuestion', {
+				author,
+				question,
+			});
+			setSending(false);
+			ToastAndroid.show('Question sent!', ToastAndroid.SHORT);
+		} catch (err) {
+			console.log(err);
+			setSending(false);
+			ToastAndroid.show(
+				'Something went wrong, Please try again!',
+				ToastAndroid.SHORT
+			);
+		}
+	};
 
 	useEffect(() => {
 		initializeAppLanguage();
@@ -105,7 +112,11 @@ const FaqScreen = () => {
 									style={styles.buttonStyle}
 									onPress={() => sendQuestion(value)}
 								>
-									{i18n.t('buttonSend')}
+									{ sending ? (
+										<Spinner status="basic" />
+									) : (
+										i18n.t('buttonSend')
+									)}
 								</Button>
 								<Button
 									style={styles.buttonStyle}
